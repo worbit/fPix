@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Generator" content="Processing" />
+<title>fPix</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<!--[if lt IE 9]>
+			<script type="text/javascript">alert("Your browser does not support the canvas tag.");</script>
+		<![endif]-->
+<script type="text/javascript" src="processing.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+// convenience function to get the id attribute of generated sketch html element
+function getProcessingSketchId () { 
+	return 'fPixweb150429';
+}
+
+function getP5() {
+	return Processing.getInstanceById(getProcessingSketchId());
+}
+
+function updateValues() {
+	getP5().setWidth(document.getElementById('wInput').value);
+	getP5().setHeight(document.getElementById('hInput').value);
+}
+
+function tryLoading(res) {
+	//document.getElementById('console').innerHTML = 'TRY LOADING: '+res;
+	
+	if (res!="") {
+		//document.getElementById('console').innerHTML = res;
+		getP5().loadPicture(res);
+	} else {
+		//document.getElementById('console').innerHTML = 'AN ERROR OCCURED';
+	}
+	
+	return true;
+}
+
+function startUpload() {
+	//document.getElementById('console').innerHTML = 'UPLOAD STARTED!';
+	return true;
+}
+
+function makeFit() {
+	var s = getP5().fitScale();
+	document.getElementById('imgscale').value = s;
+	document.getElementById('scllabel').innerHTML='('+s+')';
+}
+
+function targetCenter() {
+	getP5().targetMode();
+	//document.getElementById('console').innerHTML = 'SELECT CENTER FOR CONCENTRIC';
+}
+
+function exportGC() {
+	var x = getP5().generateMachineCode();
+	
+	//console.log(x);
+	//document.getElementById('outFrame').innerHTML = x;
+	
+	var myWindow = window.open("","MsgWindow","width=400,height=600,scrollbars=yes");
+	myWindow.document.write(x);
+}
+
+function download() {
+	var gcode = getP5().generateMachineCode();
+	var fn = getP5().getFilename();
+	$.ajax({
+		type: 'POST',
+		url: 'write.php',
+		data: 'data='+gcode+'&fn='+fn,
+		success: showCode(fn)
+		});
+}
+
+function showCode(fn) {
+	$("#downloadlink").append("<li><a href='output/"+fn+".ncc'>"+fn+".ncc</a></li>");
+	//var myWindow = window.open("","MsgWindow","width=400,height=600,scrollbars=yes");
+	//myWindow.location = 'output/'+fn+'.ncc';
+}
+
+</script>
+</head>
+
+<body>
+<table width="100%" border="0">
+  <tr>
+    <td valign="top" width="30%"><table width="100%" border="0" cellspacing="7">
+        <tr>
+          <td colspan="2"><hr /></td>
+        </tr>
+        <tr>
+          <td colspan="2"><a href="http://www.mathiasbernhard.ch"><h1 style="float:left">mathiasbernhard.ch</h1></a><h1 style="float:right">fPix</h1></td>
+        <tr>
+          <td colspan="2"><hr /></td>
+        </tr>
+        <tr>
+          <td>IMAGEPATH</td>
+          <td>
+          Upload a new picture, select one from below or try one of <a href="https://www.google.ch/search?hl=de&site=imghp&tbm=isch&source=hp&biw=1482&bih=792&q=b%26w+portraits" target="_blank">these</a>.<br /><br />
+          <form enctype="multipart/form-data" method="post" action="upload.php" target="test"
+          onsubmit="startUpload();">
+              <input type="file" accept="image/*" capture="camera" name="fileToUpload" id="fileToUpload" />
+              <input type="submit" name="formSubmitted" value="UPLOAD" />
+            </form></td>
+        </tr>
+        <tr>
+          <td colspan="2"><iframe src="loadpix.php" style='width: 100%; height: 250px; border: 1px solid #bbb' name='test'> </iframe></td>
+        </tr>
+        <tr>
+          <td>IMAGE DETAILS</td>
+          <td><input type="range" id="imgrot" name="imgrot" min="0" max="360" value="0"
+        onchange="getP5().setRotation(this.value);
+        		document.getElementById('rotlabel').innerHTML='('+this.value +'&deg;)'" />
+            ROTATION <span id="rotlabel">(0&deg;)</span><br/>
+            <input type="range" id="imgscale" name="imgscale" min="0.1" max="3.0" value="1.0" step="0.01" onchange="getP5().setScale(this.value);
+            document.getElementById('scllabel').innerHTML='('+this.value +')'" />
+            SCALE  <span id="scllabel">(1.0)</span><br/>
+            <button type="button" onclick="makeFit()">FIT</button>
+            <input type="checkbox" id="showImg" name="showimg" onchange="getP5().setShowImg(this.checked)"/>
+            show image</td>
+        </tr>
+        <tr>
+          <td colspan="2" height="5px"><hr /></td>
+        </tr>
+
+        <tr>
+          <td>DIAMETER</td>
+          <td><input type="radio" id="bit1" name="radios" value="3" onclick="getP5().setDim(3)" />
+            <label for="bit1">3</label>
+            <input type="radio" id="bit2" name="radios" value="6" onclick="getP5().setDim(6)" />
+            <label for="bit2">6</label>
+            <input type="radio" id="bit3" name="radios" value="12" onclick="getP5().setDim(12)" checked />
+            <label for="bit3">12</label>
+            <input type="radio" id="bit4" name="radios" value="10" onclick="getP5().setDim(document.getElementById('freeDiam').value)"/>
+            <label for="bit4">OTHER</label>
+            <input type="text" size="5" id="freeDiam" value="10" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
+            mm
+            </td>
+        </tr>
+<!--        <tr>
+          <td>OTHER</td>
+          <td><input type="text" size="15" id="freeDiam" value="10"
+          onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')">
+            </input>
+            <button type="button" onclick="getP5().setDim(document.getElementById('freeDiam').value)">GO</button></td>
+        </tr>
+--> 
+       <tr>
+          <td>WIDTH</td>
+          <td><input type="text" size="15" id="wInput" value="600"
+          onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
+            <button type="button" onclick="updateValues()">UPDATE</button></td>
+        </tr>
+        <tr>
+          <td>HEIGHT</td>
+          <td><input type="text" size="15" id="hInput" value="450"
+          onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
+            <button type="button" onclick="updateValues()">UPDATE</button></td>
+        </tr>
+        <tr>
+          <td colspan="2" height="5px"><hr /></td>
+        </tr>
+        
+        <tr>
+          <td>STYLE</td>
+          <td><input type="radio" id="sty1" name="styles" value="dots" onclick="getP5().setConnect(false)" checked/>
+            <label for="sty1">DOTS</label>
+            <input type="radio" id="sty2" name="styles" value="lines" onclick="getP5().setConnect(true)" />
+            <label for="sty2">LINES</label></td>
+        </tr>
+        
+        <tr>
+          <td>PATTERN</td>
+          <td><input type="radio" id="pat1" name="patterns" value="dots" onclick="getP5().setType(0)" checked/>
+            <label for="pat1">ORTHOGONAL</label>
+            <input type="radio" id="pat2" name="patterns" value="lines" onclick="getP5().setType(1)" />
+            <label for="pat2">HONEYCOMB</label>
+            <input type="radio" id="pat3" name="patterns" value="concenctric" onclick="getP5().setType(2)" />
+            <label for="pat3">CONCENTRIC</label>
+            <input type="radio" id="pat4" name="patterns" value="spiral" onclick="getP5().setType(3)" />
+            <label for="pat4">SPIRAL</label>
+            </td>
+        </tr>
+        <tr>
+        <td>
+        CENTER
+        </td>
+        <td>
+        <button type="button" onclick="targetCenter()">SET</button>
+        </td>
+        </tr>
+        <tr>
+          <td> LEVELS </td>
+          <td><input type="range" id="low" name="lowlimit" min="0" max="255" value="0"
+        onchange="getP5().setLow(this.value/255)">
+            LOW <br/>
+            <input type="range" id="high" name="uplimit" min="0" max="255" value="255"
+        onchange="getP5().setHigh(this.value/255)">
+            HIGH </td>
+        </tr>
+        <tr>
+          <td colspan="2" height="5px"><hr /></td>
+        </tr>
+
+        <tr>
+          <td>OUTPUT</td>
+          <td>
+          <!--<button type="button" onclick="exportGC()">EXPORT GC</button>&nbsp;-->
+          <button type="button" onclick="download()">EXPORT GC</button>
+          <span><ol id="downloadlink"></ol></span>
+          </td>
+        </tr>
+        
+        <tr>
+          <td colspan="2" height="5px"><hr /></td>
+        </tr>
+        <!--
+        <tr>
+          <td>CONSOLE</td>
+          <td><p id="console">IDLE</p></td>
+        </tr>
+        <tr>
+          <td colspan="2"><div id="outFrame" style="overflow:scroll; height:110px; width:400px"></div></td>
+        </tr>
+        -->
+      </table></td>
+    <td valign="top"><canvas id="fPixweb150429" data-processing-sources="fPix_web_150429.pde" 
+						width="800" height="600">
+        <p>Your browser does not support the canvas tag.</p>
+        <!-- Note: you can put any alternative content here. --> 
+      </canvas>
+      <noscript>
+      <p>JavaScript is required to view the contents of this page.</p>
+      </noscript></td>
+  </tr>
+</table>
+
+
+<footer>&copy; <?php echo date("Y"); ?> | DESIGN : <a href="http://www.mathiasbernhard.ch/" target="_blank">mathiasbernhard.ch</a> / CREATED WITH: <a href="http://www.processingjs.org/" target="_blank">ProcessingJS</a> / <script>
+document.write(document.URL);
+</script></footer>
+
+<!--<div class="footer">
+<p>&copy; <?php echo date("Y"); ?> | designed by <a href="http://www.mathiasbernhard.ch" target="_blank">mathiasbernhard.ch</a>
+</p>
+</div>
+--></body>
+</html>
