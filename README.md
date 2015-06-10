@@ -20,23 +20,37 @@ The presentation slides showed at [Fablab Zurich](http://zurich.fablab.ch/pixelb
 
 The `*.pde` files contain the following parts and methods:
 
-#### fPix_web.pde
+#### fPix_web
 * definition of global variables
 * setup()
 * draw()
 
-#### Analyse.pde
+#### Analyse
 * calcResult(): main method to recalculate the result given the current state of parameters
   
-#### Dot.pde
+#### Dot
 Dot is an inner class defined to contain all the necessary information about one drilled hole (position, depth and whether or not it is to be drilled at all, depending on the threshold)
 
-#### Export.pde
+#### Export
 Methods to generate and return the gCode as a string. It loops through all the Dots in `myDots` (`ArrayList<ArrayList<Dot>>`)
 
-#### HelperMethods.pde
+#### HelperMethods
 * calculate average luminosity of an image tile
 * make level adjustments (everything below `low` is black and everything above `high` is white)
 * scale the image to fill the entire sheet of material, factor returned to set slider value in gui
 * ballnose conversion: converts linear grey scales to drilling depths, taking into account the round form of the tool and the area of a circle increasing to the square of the radius
 * fromat numbers to strings (digits after comma) for export, can also be used for mm/inch conversion if necessary
+
+#### Patterns
+This is where the actual pattern as collection of Dots is calculated. Which of the methods is called depends on the `type` variable, checked in a `switch` case in `Analyse.pde`. Currently, there are four patterns available:
+1. getOrthoGrid: calculates an orthogonal (90 degree) grid of points
+2. getHoneyGrid: calculates a hexagonal (60 degree) grid of points - as in a honeycomb
+3. getPolarGrid: calculates a set of concentric circles
+4. getSpiralGrid: calculates one continuous spiral from the inside out
+
+#### Preview
+Generates a preview of the calculated pattern as PGraphics object that is then displayed by the `draw` loop and actually shows up in the `<canvas>` on the site. The preview is probably not 100% accuarate compared to the physical result, especially the width and end-to-end-connections of line patterns.
+
+#### UserInteraction
+Defined in here are all the methods that are called by the GUI-elements of `index.html` to set and get parameters.
+Some of the methods can also be called on `keyPressed` (for testing purpose, without the GUI)
