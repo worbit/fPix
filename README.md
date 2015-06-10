@@ -1,7 +1,8 @@
 # fPix
-Tool to generate G-Code producing drilled dot panels from images.
+Tool to generate G-Code producing drilled dot panels from images.  
 A working implementation of the tool and some description about the project can be found here:
-http://www.mathiasbernhard.ch/fpix-pixel-art/
+http://www.mathiasbernhard.ch/fpix-pixel-art/  
+For eventual updates, I can be found on Twitter: [@W0RB1T](https://twitter.com/W0RB1T)
 
 ## Folder structure
 The files in this repository are split up into **two** main parts:
