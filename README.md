@@ -20,16 +20,23 @@ The presentation slides showed at [Fablab Zurich](http://zurich.fablab.ch/pixelb
 
 The `*.pde` files contain the following parts and methods:
 
-### fPix_web.pde
+#### fPix_web.pde
 * definition of global variables
 * setup()
 * draw()
 
-### Analyse.pde
+#### Analyse.pde
 * calcResult(): main method to recalculate the result given the current state of parameters
   
-### Dot.pde
+#### Dot.pde
 Dot is an inner class defined to contain all the necessary information about one drilled hole (position, depth and whether or not it is to be drilled at all, depending on the threshold)
 
-### Export.pde
+#### Export.pde
 Methods to generate and return the gCode as a string. It loops through all the Dots in `myDots` (`ArrayList<ArrayList<Dot>>`)
+
+#### HelperMethods.pde
+* calculate average luminosity of an image tile
+* make level adjustments (everything below `low` is black and everything above `high` is white)
+* scale the image to fill the entire sheet of material, factor returned to set slider value in gui
+* ballnose conversion: converts linear grey scales to drilling depths, taking into account the round form of the tool and the area of a circle increasing to the square of the radius
+* fromat numbers to strings (digits after comma) for export, can also be used for mm/inch conversion if necessary
