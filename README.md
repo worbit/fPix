@@ -43,6 +43,7 @@ Methods to generate and return the gCode as a string. It loops through all the D
 
 #### Patterns
 This is where the actual pattern as collection of Dots is calculated. Which of the methods is called depends on the `type` variable, checked in a `switch` case in `Analyse.pde`. Currently, there are four patterns available:
+
 1. getOrthoGrid: calculates an orthogonal (90 degree) grid of points
 2. getHoneyGrid: calculates a hexagonal (60 degree) grid of points - as in a honeycomb
 3. getPolarGrid: calculates a set of concentric circles
