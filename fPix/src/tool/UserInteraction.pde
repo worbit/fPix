@@ -95,7 +95,7 @@ void keyPressed() {
     //calcResult();
     break;
   case 't':
-    type = (type+1)%3;
+    type = (type+1)%5;
     calcResult();
     break;
   case 'k':

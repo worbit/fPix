@@ -26,6 +26,9 @@ boolean calcResult() {
   case 3:
     myDots = getSpiralGrid(tmp, stp);
     break;
+  case 4:
+  	myDots = getHamiltonPath(tmp, stp);
+  	break;
   }
 
   result = createPreview(myDots);

@@ -174,7 +174,8 @@ function showCode(fn) {
         
         <tr>
           <td>PATTERN</td>
-          <td><input type="radio" id="pat1" name="patterns" value="dots" onclick="getP5().setType(0)" checked/>
+          <td>
+          	<input type="radio" id="pat1" name="patterns" value="dots" onclick="getP5().setType(0)" checked/>
             <label for="pat1">ORTHOGONAL</label>
             <input type="radio" id="pat2" name="patterns" value="lines" onclick="getP5().setType(1)" />
             <label for="pat2">HONEYCOMB</label>
@@ -182,6 +183,8 @@ function showCode(fn) {
             <label for="pat3">CONCENTRIC</label>
             <input type="radio" id="pat4" name="patterns" value="spiral" onclick="getP5().setType(3)" />
             <label for="pat4">SPIRAL</label>
+            <input type="radio" id="pat5" name="patterns" value="maze" onclick="getP5().setType(4)" />
+            <label for="pat5">MAZE</label>
             </td>
         </tr>
         <tr>
