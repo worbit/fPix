@@ -1,3 +1,6 @@
+// Hamilton path by Nathan Clisby
+// http://clisby.net/projects/hamiltonian_path/
+
 int[][] path;
 int xmax, ymax, n;
 boolean left_end = true;
@@ -29,7 +32,6 @@ ArrayList<ArrayList<Dot>> getHamiltonPath(PGraphics pg, float step) {
     Dot d = new Dot(offx+x*step, offy+y*step, 1-val);
     h_path.add(d);
     if (d.z>threshold) d.drilled = true;
-    //line(offx+respath[i-1][0]*step,offy+respath[i-1][1]*dy,dx/2+respath[i%num][0]*dx,dy/2+respath[i%num][1]*dy);
   }
   
   out.add(h_path);
